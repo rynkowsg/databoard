@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ReplProjectCommandManager">
+    <repl-command name="Restart Server (databoard)" executionType="EXPRESSION" commandText="(restart)" executeBefore="NONE" executionNs="EXPLICIT_NS" inNamespace="development" saveAll="true" />
+    <repl-command name="Init REPL (databoard)" executionType="EXPRESSION" commandText="(require 'user)&#10;(in-ns 'user)&#10;(init)" executeBefore="NONE" executionNs="REPL_CURRENT" inNamespace="" saveAll="true" />
+  </component>
+</project>

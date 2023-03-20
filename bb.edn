@@ -1,0 +1,49 @@
+{:min-bb-version "1.1.172"
+
+ :deps {}
+
+ :tasks
+ {:requires ([babashka.fs :as fs]
+             [clojure.string :as str])
+
+  npm-install {:task (when-not (fs/directory? "node_modules")
+                       (shell "yarn install"))}
+  client:clean {:task (do
+                        (fs/delete-tree ".shadow-cljs")
+                        (fs/delete-tree "node_modules")
+                        (fs/delete-tree "resources/public/main/js"))}
+
+  ;; Example calls:
+  ;; bb client:watch -A:local-i18n
+  ;; bb client:watch -A:rad-dev
+  client:watch {:depends [npm-install]
+                :task (shell "bb shadow-npm watch :main" (str/join " " *command-line-args*))}
+
+  client:watch-clean {:depends [client:clean client:watch]}
+
+  ;; Example calls:
+  ;; bb server:repl -M:local-i18n:g/nrepl:g/repl
+  ;; bb server:repl -A:rad-dev -M:nrepl
+  server:repl {:doc "Launches REPL with additional aliases e.g. `bb server:repl -M:g/nrepl:g/repl`"
+               :requires ([clojure.string :as str]
+                          [clojure.tools.cli :refer [parse-opts]])
+               :task (let [opts-spec [["-A" "--a-aliases aliases" "Extra CLJ aliases (-A)" :default nil]
+                                      ["-M" "--m-aliases aliases" "Extra CLJ aliases (-M)" :default nil]]
+                           opts (parse-opts *command-line-args* opts-spec)
+                           {{:keys [a-aliases m-aliases]} :options :keys [arguments]} opts
+                           alias-type (if (some? m-aliases) "M" "A")
+                           aliases (str (or a-aliases "") (or m-aliases ""))
+                           args (some->> arguments (str/join " "))
+                           cmd (format "-%s:dev%s -J-Dtrace -J-Dguardrails.enabled=true %s" alias-type aliases args)]
+                       (println "[CMD] clj" cmd)
+                       (clojure cmd))}
+
+  deps (clojure "-M:antq")
+  deps-upgrade (clojure "-M:antq --upgrade")
+
+  shadow-clj {:task (let [cmd (str "-M:shadow-cljs " (str/join " " *command-line-args*))]
+                      (println "[CMD] clj" cmd)
+                      (clojure cmd))}
+  shadow-npm {:task (let [cmd (str "npx shadow-cljs " (str/join " " *command-line-args*))]
+                      (println "[CMD]" cmd)
+                      (shell cmd))}}}

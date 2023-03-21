@@ -3,7 +3,8 @@
  :deps {}
 
  :tasks
- {:requires ([babashka.fs :as fs])
+ {:requires ([babashka.fs :as fs]
+             [clojure.string :as str])
 
   npm-install {:task (when-not (fs/directory? "node_modules")
                        (shell "yarn install"))}
@@ -13,7 +14,7 @@
                         (fs/delete-tree "resources/public/main/js"))}
 
   client:watch {:depends [npm-install]
-                :task (shell "npx shadow-cljs watch :main")}
+                :task (shell "bb shadow-npm watch :main")}
 
   client:watch-clean {:depends [client:clean client:watch]}
 
@@ -27,9 +28,16 @@
                            alias-type (if (some? m-aliases) "M" "A")
                            aliases (str (or a-aliases "") (or m-aliases ""))
                            args (some->> arguments (str/join " "))
-                           cmd (format "clj -%s:dev%s -J-Dtrace -J-Dguardrails.enabled=true %s" alias-type aliases args)]
-                       (println cmd)
-                       (shell cmd))}
+                           cmd (format "-%s:dev%s -J-Dtrace -J-Dguardrails.enabled=true %s" alias-type aliases args)]
+                       (println "[CMD] clj" cmd)
+                       (clojure cmd))}
 
   deps (clojure "-M:antq")
-  deps-upgrade (clojure "-M:antq --upgrade")}}
+  deps-upgrade (clojure "-M:antq --upgrade")
+
+  shadow-clj {:task (let [cmd (str "-M:shadow-cljs " (str/join " " *command-line-args*))]
+                      (println "[CMD] clj" cmd)
+                      (clojure cmd))}
+  shadow-npm {:task (let [cmd (str "npx shadow-cljs " (str/join " " *command-line-args*))]
+                      (println "[CMD]" cmd)
+                      (shell cmd))}}}

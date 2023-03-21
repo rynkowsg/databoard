@@ -25,7 +25,7 @@
                                      ;; load/refresh of `utils.deps` ns causes pop up of this error
                                      ;; it is because that ns uses `clojure.tools.deps.alpha.repl` (org.clojure/tools.deps.alpha)
                                      :mvn/version "2.0.7"}
-                thheller/shadow-cljs {:mvn/version "2.22.3"}}}
+                thheller/shadow-cljs {:mvn/version "2.22.6"}}}
 
   :antq
   {:replace-paths []
@@ -35,4 +35,9 @@
 
   :nrepl
   {:extra-deps {nrepl/nrepl {:mvn/version "1.0.0"}}
-   :main-opts ["-m" "nrepl.cmdline" "--interactive" "--color"]}}}
+   :main-opts ["-m" "nrepl.cmdline" "--interactive" "--color"]}
+
+  :shadow-cljs
+  {:extra-deps {thheller/shadow-cljs {:mvn/version "2.22.6"}
+                org.slf4j/slf4j-nop {:mvn/version "2.0.7"}}
+   :main-opts ["-m" "shadow.cljs.devtools.cli"]}}}

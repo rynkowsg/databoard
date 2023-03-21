@@ -17,7 +17,7 @@
   [server-time-resolver])
 
 (def base-env
-  (-> {}
+  (-> {:com.wsscode.pathom3.error/lenient-mode? false}
       (pci/register operations)))
 
 (defstate parser

@@ -8,6 +8,7 @@
 (pco/defresolver locale-resolver [env _input]
   {::pco/output [::i18n/translations]}
   (let [locale (:locale (pco/params env))]
+    (Thread/sleep 5000)
     (when-let [translations (i18n/load-locale "po-files" locale)]
       {::i18n/translations translations})))
 

@@ -3,6 +3,7 @@
    [com.wsscode.pathom3.connect.indexes :as pci]
    [com.wsscode.pathom3.connect.operation :as pco]
    [com.wsscode.pathom3.interface.eql :as p.eql]
+   [databoard.server.translations.locale-resolver :as locale-resolver]
    [mount.core :refer [defstate]])
   (:import
    (java.util Date)))
@@ -14,7 +15,8 @@
 #_(server-time-resolver {} {})
 
 (def operations
-  [server-time-resolver])
+  [server-time-resolver
+   locale-resolver/resolvers])
 
 (def base-env
   (-> {:com.wsscode.pathom3.error/lenient-mode? false}
@@ -29,4 +31,8 @@
         response))))
 
 #_(comment
-   (parser {} [:server/time]))
+   (parser {} [:server/time])
+   (parser {} '[({:com.fulcrologic.fulcro-i18n.i18n/translations
+                  [:com.fulcrologic.fulcro-i18n.i18n/locale
+                   :com.fulcrologic.fulcro-i18n.i18n/translations]}
+                 {:locale :pl})]))

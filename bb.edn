@@ -1,6 +1,6 @@
 {:min-bb-version "1.1.172"
 
- :deps {}
+ :deps {com.fulcrologic/fulcro-i18n {:mvn/version "1.0.0"}}
 
  :tasks
  {:requires ([babashka.fs :as fs]
@@ -11,6 +11,7 @@
   client:clean {:task (do
                         (fs/delete-tree ".shadow-cljs")
                         (fs/delete-tree "node_modules")
+                        (fs/delete-tree "resources/public/i18n")
                         (fs/delete-tree "resources/public/main/js"))}
 
   client:watch {:depends [npm-install]
@@ -40,4 +41,22 @@
                       (clojure cmd))}
   shadow-npm {:task (let [cmd (str "npx shadow-cljs " (str/join " " *command-line-args*))]
                       (println "[CMD]" cmd)
-                      (shell cmd))}}}
+                      (shell cmd))}
+
+  i18n {:requires ([com.fulcrologic.fulcro-i18n.gettext :as gettext])
+        :doc "Generates PO/POT files."
+        :task (do
+                (shell "bb shadow-clj release :i18n")
+                (gettext/extract-strings {:js-path "resources/public/i18n/js/output.js"
+                                          :po "resources/po-files"})
+                (fs/delete-tree "resources/public/i18n")
+                (defn update-po [pot po]
+                  (if (fs/exists? po)
+                    (shell (format "msgmerge --force-po --no-wrap -U %s %s" po pot))
+                    (do (fs/copy pot po)
+                        (shell (format "sed -i s/charset=CHARSET/charset=UTF-8/g %s" po)))))
+                ;; todo: consider reading the supported locales from the code/config
+                (update-po "resources/po-files/messages.pot" "resources/po-files/de.po")
+                (update-po "resources/po-files/messages.pot" "resources/po-files/en.po")
+                (update-po "resources/po-files/messages.pot" "resources/po-files/es.po")
+                (update-po "resources/po-files/messages.pot" "resources/po-files/pl.po"))}}}

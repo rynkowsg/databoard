@@ -18,6 +18,7 @@ node_modules/
 
 # project specific
 # :output-dir defined in shadow-cljs.edn
+resources/public/i18n/
 resources/public/main/js/
 
 # docs

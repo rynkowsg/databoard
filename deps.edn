@@ -1,6 +1,8 @@
 {:paths ["src/main" "resources"]
  :deps {com.cognitect/transit-clj {:mvn/version "1.0.329"}
         com.fulcrologic/fulcro {:mvn/version "3.6.1"}
+        com.fulcrologic/fulcro-i18n {:mvn/version "1.0.0"}
+        com.ibm.icu/icu4j {:mvn/version "72.1"}             ;; needed for i18n in server-side rendering
         com.taoensso/timbre {:mvn/version "6.1.0"}
         com.wsscode/pathom3 {:mvn/version "2023.01.31-alpha"}
         http-kit/http-kit {:mvn/version "2.6.0"}

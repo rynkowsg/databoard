@@ -3,7 +3,12 @@
  :nrepl {:init-ns user                                      ;; enters user.clj
          :port 9000}
 
- :builds {:main {:target :browser
+ :builds {:i18n {:target :browser
+                 :output-dir "resources/public/i18n/js"
+                 :compiler-options {:optimizations :whitespace}
+                 :modules {:output {:init-fn databoard.client.app/init}}}
+
+          :main {:target :browser
                  :output-dir "resources/public/main/js"
                  :asset-path "/main/js"
                  :modules {:main {:init-fn databoard.client.app/init}}

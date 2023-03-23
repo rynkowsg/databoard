@@ -27,3 +27,7 @@
        (dom/h4 (tr "My data & charts"))
        (dom/hr)
        (dcc-login/ui-login login)))))
+
+;; still loading blinks
+;;  - it render it first, then hide it, then show again
+;;  - go back to code without df/load and see how many times render then

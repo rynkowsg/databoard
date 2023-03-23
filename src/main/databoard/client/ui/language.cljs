@@ -23,9 +23,11 @@
     (or (first matching-locales) (first app-locales))))
 #_(get-init-locale)
 
+(def init-locale (get-init-locale))
+
 ;; component (todo: Extract component to separate file)
 
-(declare change-locale)
+(declare set-locale)
 
 (comp/defsc LocaleSelector
   "A reusable locale selector. Generates a simple `dom/select` with CSS class fulcro$i18n$locale_selector.
@@ -40,7 +42,7 @@
         mk-option (fn [i {::i18n/keys [locale] :ui/keys [locale-name]}]
                     (dom/option {:key i :value locale} locale-name)) ;; attach locale as a value to option
         on-change (fn [evt] (when-let [locale (keyword (evt/target-value evt))]
-                              (change-locale (comp/any->app this) locale)))]
+                              (set-locale (comp/any->app this) locale)))]
     (dom/select :.fulcro$i18n$locale_selector
       {:onChange on-change :value selected-locale}
       (map-indexed mk-option available-locales))))
@@ -53,21 +55,23 @@
    {:locales (->> locales
                   (map #(comp/get-initial-state i18n/Locale %))
                   (into []))}))
-#_ (get-locale-selector-initial-state)
+#_(get-locale-selector-initial-state)
 
 ;; locale updates
 
 ;; TODO: consider updating meta
-(defn change-locale [app l]
+(defn set-locale [app l]
   (comp/transact! app `[(i18n/change-locale {:locale ~(keyword l)})]))
-#_(change-locale databoard.client.app/app "en")
-#_(change-locale databoard.client.app/app :pl)
+#_(set-locale databoard.client.app/app "en")
+#_(set-locale databoard.client.app/app :pl)
 
-(defn load-current-locale-translations [app]
-  (let [l (-> app ::app/state-atom deref ::i18n/current-locale second)]
-    (df/load! app ::i18n/translations i18n/Locale {:params {:locale l}})
-    #_(change-locale app l) ;; works but causes the refresh
-    #_(app/force-root-render! app))) ;; doesn't work
+(defn load-translations-with-marker [app marker]
+  (let [l (-> app app/current-state ::i18n/current-locale second)]
+    (df/load! app ::i18n/translations i18n/Locale {:params {:locale l}
+                                                   :marker marker
+                                                   :post-mutation `i18n/translations-loaded})
+    #_(set-locale app l)                                    ;; works but causes the refresh
+    #_(app/force-root-render! app)))                        ;; doesn't work
 #_(load-current-locale-translations databoard.client.app/app)
 
 #_(comment

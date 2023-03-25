@@ -7,7 +7,8 @@
    [com.fulcrologic.fulcro.react.version18 :refer [with-react18]]
    ;[com.fulcrologic.fulcro.rendering.keyframe-render :as keyframe-render]
    [com.fulcrologic.fulcro.rendering.multiple-roots-renderer :as multiple-roots-renderer]
-   [databoard.client.components.root :as dcc-root]))
+   [databoard.client.components.root :as dcc-root]
+   [databoard.client.translations.locale :as dct-locale]))
 
 (defonce app
   (with-react18
@@ -21,6 +22,7 @@
      ;             (merge {} (::i18n/current-locale db)))})))
 
 (defn ^:export init []
+  (dct-locale/load-initial-transl app)
   (app/mount! app dcc-root/Root "app")
   (js/console.log "Loaded"))
 

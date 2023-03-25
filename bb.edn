@@ -1,6 +1,7 @@
 {:min-bb-version "1.1.172"
 
- :deps {com.fulcrologic/fulcro-i18n {:mvn/version "1.0.0"}}
+ :deps {com.fulcrologic/fulcro-i18n {:mvn/version "1.0.0"}
+        databoard/databoard {:local/root "."}}
 
  :tasks
  {:requires ([babashka.fs :as fs]
@@ -49,20 +50,21 @@
                       (println "[CMD]" cmd)
                       (shell cmd))}
 
-  i18n {:requires ([com.fulcrologic.fulcro-i18n.gettext :as gettext])
+  i18n {:requires ([com.fulcrologic.fulcro-i18n.gettext :as gettext]
+                   [databoard.client.translations.locale-def :refer [locales]])
         :doc "Generates PO/POT files."
-        :task (do
-                (shell "bb shadow-clj release :i18n")
-                (gettext/extract-strings {:js-path "resources/public/i18n/js/output.js"
-                                          :po "resources/po-files"})
-                (fs/delete-tree "resources/public/i18n")
-                (defn update-po [pot po]
-                  (if (fs/exists? po)
-                    (shell (format "msgmerge --force-po --no-wrap -U %s %s" po pot))
-                    (do (fs/copy pot po)
-                        (shell (format "sed -i s/charset=CHARSET/charset=UTF-8/g %s" po)))))
-                ;; todo: consider reading the supported locales from the code/config
-                (update-po "resources/po-files/messages.pot" "resources/po-files/de.po")
-                (update-po "resources/po-files/messages.pot" "resources/po-files/en.po")
-                (update-po "resources/po-files/messages.pot" "resources/po-files/es.po")
-                (update-po "resources/po-files/messages.pot" "resources/po-files/pl.po"))}}}
+        :task
+        (do
+          (shell "bb shadow-clj release :i18n")
+          (gettext/extract-strings {:js-path "resources/public/i18n/js/output.js"
+                                    :po "resources/po-files"})
+          (fs/delete-tree "resources/public/i18n")
+          (defn update-po [pot po]
+            (if (fs/exists? po)
+              (shell (format "msgmerge --force-po --no-wrap -U %s %s" po pot))
+              (do (fs/copy pot po)
+                  (shell (format "sed -i s/charset=CHARSET/charset=UTF-8/g %s" po)))))
+          (let [detected-locales (->> locales (map :locale) (map name))]
+            (println "Detected locales:" detected-locales)
+            (doseq [l detected-locales]
+              (update-po "resources/po-files/messages.pot" (format "resources/po-files/%s.po" l)))))}}}

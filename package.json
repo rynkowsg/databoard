@@ -7,7 +7,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "shadow-cljs": "2.22.6"
+    "shadow-cljs": "2.22.7"
   },
   "engines": {
     "node": "14.21.1",

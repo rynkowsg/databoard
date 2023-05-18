@@ -1,13 +1,13 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Server (remote)" type="ClojureREPL" factoryName="Remote" activateToolWindowBeforeRun="false">
+  <configuration default="false" name="(nrepl) server" type="ClojureREPL" factoryName="Remote" activateToolWindowBeforeRun="false">
     <module name="databoard" />
-    <setting name="displayName" value="Server (remote)" />
+    <setting name="displayName" value="(nrepl) server" />
     <setting name="host" value="" />
     <setting name="port" value="0" />
     <setting name="replType" value="NREPL" />
     <setting name="configType" value="PORT_FILE" />
-    <setting name="replPortFileType" value="STANDARD" />
-    <setting name="customPortFile" value="" />
+    <setting name="replPortFileType" value="SPECIFY" />
+    <setting name="customPortFile" value=".nrepl-port" />
     <setting name="fixLineNumbers" value="false" />
     <setting name="focusEditor" value="false" />
     <method v="2" />

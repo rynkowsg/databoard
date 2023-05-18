@@ -8,7 +8,10 @@
 ;; Ensure we only refresh the source we care about. This is important
 ;; because `resources` is on our classpath and we don't want to
 ;; accidentally pull source from there when cljs builds cache files there.
-(tools-ns/set-refresh-dirs "src/main" "src/dev" "src/test")
+(tools-ns/set-refresh-dirs
+  "development/src"
+  "bases/databoard-old/src"
+  "bases/databoard-old/test")
 
 (alter-var-root #'s/*explain-out* (constantly expound/printer))
 

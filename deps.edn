@@ -1,10 +1,32 @@
-{:aliases  {:dev {:extra-paths ["development/src"]
-                  :extra-deps {org.clojure/clojure {:mvn/version "1.11.1"}}}
+{:deps
+ {pl.rynkowski/databoard-old {:local/root "projects/databoard-old"}}
 
-            :test {:extra-paths []}
+ :aliases
+ {:dev {:extra-paths [;; sorted
+                      "bases/databoard-old/src"
+                      "bases/development/src"]
 
-            :poly {:main-opts ["-m" "polylith.clj.core.poly-cli.core"]
-                   :extra-deps {polyfy/polylith
-                                {:git/url   "https://github.com/polyfy/polylith"
-                                 :sha       "a073b7c8dbea176a8cb39b3c4d7c3d465c99e946"
-                                 :deps/root "projects/poly"}}}}}
+        :extra-deps {pl.rynkowski/development {:local/root "bases/development"}
+                     ;; sorted:
+                     org.clojure/tools.namespace {:mvn/version "1.4.4"}
+                     org.slf4j/slf4j-nop {;; to fix "SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder""
+                                          ;; load/refresh of `utils.deps` ns causes pop up of this error
+                                          ;; it is because that ns uses `clojure.tools.deps.alpha.repl` (org.clojure/tools.deps.alpha)
+                                          :mvn/version "2.0.7"}
+                     thheller/shadow-cljs {:mvn/version "2.22.6"}}}
+
+  :test {:extra-paths [;; sorted:
+                       "bases/databoard-old/test"
+                       "bases/development/test"]}
+
+  :antq
+  {:replace-paths []
+   :replace-deps {com.github.liquidz/antq {:mvn/version "2.2.1017"}
+                  org.slf4j/slf4j-nop {:mvn/version "2.0.7"}}
+   :main-opts ["-m" "antq.core"]}
+
+  :poly {:main-opts ["-m" "polylith.clj.core.poly-cli.core"]
+         :extra-deps {polyfy/polylith
+                      {:git/url   "https://github.com/polyfy/polylith"
+                       :sha       "a073b7c8dbea176a8cb39b3c4d7c3d465c99e946"
+                       :deps/root "projects/poly"}}}}}

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+dirs="$(ls -d1 . bases/* projects/* | sort -u | tr '\n' ':')"
+
+clojure -M:antq \
+	--skip=pom \
+	-d "$dirs" \
+	"$@"
+
+# antq exits with 1 if any deps are outdated -- we want a 0 exit:
+exit 0

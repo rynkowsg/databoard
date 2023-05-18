@@ -1,0 +1,19 @@
+{:min-bb-version "1.1.172"
+
+ :tasks
+ {server:repl {:doc "Launches REPL with additional aliases, e.g. `bb server:repl -M:g/nrepl:g/repl`"
+               :requires ([clojure.string :as str]
+                          [clojure.tools.cli :refer [parse-opts]])
+               :task (let [opts-spec [["-A" "--a-aliases aliases" "Extra CLJ aliases (-A)" :default nil]
+                                      ["-M" "--m-aliases aliases" "Extra CLJ aliases (-M)" :default nil]]
+                           opts (parse-opts *command-line-args* opts-spec)
+                           {{:keys [a-aliases m-aliases]} :options :keys [arguments]} opts
+                           alias-type (if (some? m-aliases) "M" "A")
+                           aliases (str (or a-aliases "") (or m-aliases ""))
+                           args (some->> arguments (str/join " "))
+                           cmd (format "-%s:dev%s -J-Dtrace -J-Dguardrails.enabled=true %s" alias-type aliases args)]
+                       (println "[CMD] clj" cmd)
+                       (clojure cmd))}
+
+  deps {:requires ([clojure.string :as str])
+        :task (shell (str "bin/antq " (str/join " " *command-line-args*)))}}}

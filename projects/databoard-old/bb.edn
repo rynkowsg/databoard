@@ -19,23 +19,6 @@
 
   client:watch-clean {:depends [client:clean client:watch]}
 
-  server:repl {:doc "Launches REPL with additional aliases, e.g. `bb server:repl -M:g/nrepl:g/repl`"
-               :requires ([clojure.string :as str]
-                          [clojure.tools.cli :refer [parse-opts]])
-               :task (let [opts-spec [["-A" "--a-aliases aliases" "Extra CLJ aliases (-A)" :default nil]
-                                      ["-M" "--m-aliases aliases" "Extra CLJ aliases (-M)" :default nil]]
-                           opts (parse-opts *command-line-args* opts-spec)
-                           {{:keys [a-aliases m-aliases]} :options :keys [arguments]} opts
-                           alias-type (if (some? m-aliases) "M" "A")
-                           aliases (str (or a-aliases "") (or m-aliases ""))
-                           args (some->> arguments (str/join " "))
-                           cmd (format "-%s:dev%s -J-Dtrace -J-Dguardrails.enabled=true %s" alias-type aliases args)]
-                       (println "[CMD] clj" cmd)
-                       (clojure cmd))}
-
-  deps (clojure "-M:antq")
-  deps-upgrade (clojure "-M:antq --upgrade")
-
   shadow-clj {:task (let [cmd (str "-M:shadow-cljs " (str/join " " *command-line-args*))]
                       (println "[CMD] clj" cmd)
                       (clojure cmd))}

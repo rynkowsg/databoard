@@ -1,0 +1,20 @@
+{:paths ["src" "resources"]
+
+ :deps
+ {pl.rynkowski.databoard.base/databoard-old {:local/root "../../bases/databoard-old"}
+  ;; dev specific
+  org.clojure/clojurescript {:mvn/version "1.11.60"}
+  org.clojure/tools.deps.alpha {;; it is to load libraries dynamically
+                                ;; https://github.com/clojure/tools.deps.alpha/tree/add-lib3
+                                :git/url "https://github.com/clojure/tools.deps.alpha"
+                                :sha "8f8fc2571e721301b6d52e191129248355cb8c5a"}
+  org.clojure/tools.namespace {:mvn/version "1.4.4"}
+  org.slf4j/slf4j-nop {;; to fix "SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder""
+                       ;; load/refresh of `utils.deps` ns causes pop up of this error
+                       ;; it is because that ns uses `clojure.tools.deps.alpha.repl` (org.clojure/tools.deps.alpha)
+                       :mvn/version "2.0.7"}
+  thheller/shadow-cljs {:mvn/version "2.22.6"}}
+
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps {}}}}

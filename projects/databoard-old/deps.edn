@@ -1,0 +1,12 @@
+{:paths ["resources"]
+
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        pl.rynkowski.databoard.base/databoard-old {:local/root "../../bases/databoard-old"}}
+
+ :aliases
+ {:dev {:extra-deps {pl.rynkowski.databoard.base/development {:local/root "../../bases/development"}}}
+
+  :shadow-cljs
+  {:extra-deps {thheller/shadow-cljs {:mvn/version "2.22.6"}
+                org.slf4j/slf4j-nop {:mvn/version "2.0.7"}}
+   :main-opts ["-m" "shadow.cljs.devtools.cli"]}}}

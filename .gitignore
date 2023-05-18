@@ -1,10 +1,8 @@
-**/classes
-**/target
-**/.artifacts
-**/.cpcache
-**/.DS_Store
-**/.gradle
+# MacOs
+.DS_Store
 
+# JetBrains
+#.idea/
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -13,27 +11,34 @@
 .idea/**/statistic.xml
 .idea/dictionaries/**
 .idea/libraries/**
-
-# File-based project format
-*.iws
-*.ipr
-
 # Cursive Clojure plugin
 .idea/replstate.xml
 *.iml
 
-/example/example/**
-artifacts
-projects/**/pom.xml
-
-# nrepl
-.nrepl-port
-
 # clojure-lsp
 .lsp/.cache
+
+# Calva VS Code Extension
+.calva/output-window/output.calva-repl
 
 # clj-kondo
 .clj-kondo/.cache
 
-# Calva VS Code Extension
-.calva/output-window/output.calva-repl
+# node
+node_modules/
+
+# shadow-cljs
+.shadow-cljs/
+**/.cpcache
+**/cljs-runtime/
+
+# nrepl
+.nrepl-port
+
+# project specific
+# :output-dir defined in shadow-cljs.edn
+../projects/databoard-old/resources/public/i18n/
+../projects/databoard-old/resources/public/main/js/
+
+# docs
+docs/***/*.html

@@ -9,6 +9,7 @@
   {::pco/output [::i18n/translations]}
   (let [locale (:locale (pco/params env))]
     (Thread/sleep 2500)
+    (i18n/load-locale "po-files" locale)
     (when-let [translations (i18n/load-locale "po-files" locale)]
       {::i18n/translations translations})))
 

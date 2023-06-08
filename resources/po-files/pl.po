@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 09:24+0000\n"
+"POT-Creation-Date: 2023-03-27 07:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,10 +21,10 @@ msgstr ""
 msgid "Login"
 msgstr "Zaloguj się"
 
-#: resources/public/i18n/js/output.js:13248
+#: resources/public/i18n/js/output.js:13254
 msgid "Databoard"
 msgstr "Databoard"
 
-#: resources/public/i18n/js/output.js:13248
+#: resources/public/i18n/js/output.js:13254
 msgid "My data & charts"
 msgstr "Moje dane i wykresy"

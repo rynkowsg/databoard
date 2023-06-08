@@ -1,7 +1,6 @@
 {:min-bb-version "1.1.172"
 
- :deps {com.fulcrologic/fulcro-i18n {:mvn/version "1.0.0"}
-        databoard/databoard {:local/root "."}}
+ :deps {databoard/databoard {:local/root "."}}
 
  :tasks
  {:requires ([babashka.fs :as fs]
@@ -21,7 +20,8 @@
   client:watch {:depends [npm-install]
                 :task (shell "bb shadow-npm watch :main" (str/join " " *command-line-args*))}
 
-  client:watch-clean {:depends [client:clean client:watch]}
+  client:watch-clean {:depends [client:clean]
+                      :task (shell "bb client:watch" (str/join " " *command-line-args*))}
 
   ;; Example calls:
   ;; bb server:repl -M:local-i18n:g/nrepl:g/repl
@@ -40,8 +40,7 @@
                        (println "[CMD] clj" cmd)
                        (clojure cmd))}
 
-  deps (clojure "-M:antq")
-  deps-upgrade (clojure "-M:antq --upgrade")
+  deps (clojure "-M:antq" (str/join " " *command-line-args*))
 
   shadow-clj {:task (let [cmd (str "-M:shadow-cljs " (str/join " " *command-line-args*))]
                       (println "[CMD] clj" cmd)
@@ -55,15 +54,14 @@
         :doc "Generates PO/POT files."
         :task
         (do
-          (shell "bb shadow-clj release :i18n")
-          (gettext/extract-strings {:js-path "resources/public/i18n/js/output.js"
-                                    :po "resources/po-files"})
-          (fs/delete-tree "resources/public/i18n")
           (defn update-po [pot po]
             (if (fs/exists? po)
               (shell (format "msgmerge --force-po --no-wrap -U %s %s" po pot))
               (do (fs/copy pot po)
                   (shell (format "sed -i s/charset=CHARSET/charset=UTF-8/g %s" po)))))
+          (shell "bb shadow-clj release :i18n")
+          (gettext/extract-strings {:js-path "resources/public/i18n/js/output.js" :po "resources/po-files"})
+          (fs/delete-tree "resources/public/i18n")
           (let [detected-locales (->> locales (map :locale) (map name))]
             (println "Detected locales:" detected-locales)
             (doseq [l detected-locales]

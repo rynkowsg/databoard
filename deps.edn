@@ -18,6 +18,7 @@
   {:extra-paths ["src/dev"]
    :extra-deps {binaryage/devtools {:mvn/version "1.0.6"}
                 org.clojure/clojurescript {:mvn/version "1.11.60"}
+                org.clojure/core.async {:mvn/version "1.6.673"}
                 org.clojure/tools.deps.alpha {;; it is to load libraries dynamically
                                               ;; https://github.com/clojure/tools.deps.alpha/tree/add-lib3
                                               :git/url "https://github.com/clojure/tools.deps.alpha"
@@ -27,6 +28,8 @@
                                      ;; load/refresh of `utils.deps` ns causes pop up of this error
                                      ;; it is because that ns uses `clojure.tools.deps.alpha.repl` (org.clojure/tools.deps.alpha)
                                      :mvn/version "2.0.7"}
+                hashp/hashp {:mvn/version "0.2.2"}
+                zprint/zprint {:mvn/version "1.2.4"}
                 thheller/shadow-cljs {:mvn/version "2.22.7"}}}
 
   :antq
